@@ -1,178 +1,257 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SKC Cloud - מערכת ניהול ארונות מפתחות חכמים</title>
-  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SKC - ניהול ארונות מפתחות חכמים</title>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
     :root {
       --primary: #1e3a8a;
-      --primary-light: #3b82f6;
+      --primary-light: #2563eb;
+      --accent: #0ea5e9;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --warning: #d97706;
       --bg: #f1f5f9;
       --card: #ffffff;
       --text: #0f172a;
       --muted: #64748b;
       --border: #e2e8f0;
-      --success: #16a34a;
-      --danger: #dc2626;
-      --warning: #d97706;
     }
-    * { box-sizing: border-box; font-family: 'Heebo', sans-serif; }
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body { margin: 0; background: var(--bg); color: var(--text); }
     .hidden { display: none !important; }
-    
-    /* Login Screen */
-    #login-screen {
-      min-height: 100vh; display: flex; align-items: center; justify-content: center;
-      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); padding: 20px;
+    .btn {
+      padding: 9px 16px; border: none; border-radius: 8px; cursor: pointer;
+      font-weight: 600; font-size: 14px; transition: 0.2s; display: inline-flex; align-items: center; gap: 6px;
     }
-    .login-card {
-      background: var(--card); padding: 40px; border-radius: 16px; width: 100%; max-width: 400px;
-      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2); text-align: center;
+    .btn-primary { background: var(--primary-light); color: #fff; }
+    .btn-primary:hover { background: var(--primary); }
+    .btn-success { background: var(--success); color: #fff; }
+    .btn-success:hover { background: #15803d; }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-danger:hover { background: #b91c1c; }
+    .btn-warning { background: var(--warning); color: #fff; }
+    .btn-outline { background: #fff; color: var(--text); border: 1px solid var(--border); }
+    .btn-outline:hover { background: #f8fafc; }
+    .btn-sm { padding: 5px 10px; font-size: 12px; }
+
+    /* Auth Screen */
+    #auth-screen {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px;
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
     }
-    .logo-badge {
-      background: var(--primary); color: white; font-weight: 800; font-size: 28px;
-      padding: 10px 24px; border-radius: 12px; display: inline-block; margin-bottom: 16px; letter-spacing: 2px;
+    .auth-box {
+      background: #fff; padding: 36px; border-radius: 16px; width: 100%; max-width: 400px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25); text-align: center;
     }
-    
-    /* Top Navbar */
+    .auth-box h1 { margin: 0 0 8px; color: var(--primary); font-size: 26px; }
+    .auth-box p { margin: 0 0 24px; color: var(--muted); font-size: 14px; }
+    .form-group { margin-bottom: 14px; text-align: right; }
+    .form-group label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 13px; color: #334155; }
+    .form-control {
+      width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
+      font-size: 14px; outline: none;
+    }
+    .form-control:focus { border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+
+    /* Topbar */
     header {
-      background: var(--primary); color: white; padding: 14px 24px;
+      background: var(--primary); color: #fff; padding: 14px 24px;
       display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
-    .header-right { display: flex; align-items: center; gap: 16px; }
-    .header-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    select, input, button {
-      font-size: 15px; border-radius: 8px; border: 1px solid var(--border); padding: 9px 14px;
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand h2 { margin: 0; font-size: 20px; letter-spacing: 0.5px; }
+    .cab-selector { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .cab-selector select {
+      padding: 7px 12px; border-radius: 8px; border: none; font-weight: 600; font-size: 14px; min-width: 210px;
     }
-    button { cursor: pointer; font-weight: 600; transition: 0.2s; border: none; }
-    .btn-primary { background: var(--primary-light); color: white; }
-    .btn-primary:hover { background: #2563eb; }
-    .btn-success { background: var(--success); color: white; }
-    .btn-success:hover { background: #15803d; }
-    .btn-danger { background: var(--danger); color: white; }
-    .btn-danger:hover { background: #b91c1c; }
-    .btn-outline { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); }
-    .btn-outline:hover { background: rgba(255,255,255,0.25); }
-    .btn-sm { padding: 6px 10px; font-size: 13px; }
+    .status-pill {
+      padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700;
+      background: rgba(255,255,255,0.15);
+    }
+    .status-online { background: #16a34a; color: #fff; }
+    .status-offline { background: #dc2626; color: #fff; }
 
-    /* Container & Banner */
-    .container { max-width: 1150px; margin: 24px auto; padding: 0 16px; }
+    /* Navigation Tabs */
+    nav.tabs {
+      background: #fff; padding: 0 24px; border-bottom: 1px solid var(--border);
+      display: flex; gap: 8px; overflow-x: auto;
+    }
+    .tab-btn {
+      padding: 14px 18px; border: none; background: transparent; cursor: pointer;
+      font-size: 15px; font-weight: 600; color: var(--muted); border-bottom: 3px solid transparent;
+      display: inline-flex; align-items: center; gap: 8px; white-space: nowrap;
+    }
+    .tab-btn.active { color: var(--primary-light); border-bottom-color: var(--primary-light); }
+    .badge-alert {
+      background: var(--danger); color: #fff; border-radius: 999px; padding: 2px 8px;
+      font-size: 12px; font-weight: 700;
+    }
+
+    /* Container & Cards */
+    .container { max-width: 1280px; margin: 24px auto; padding: 0 20px; }
+    .card {
+      background: var(--card); border-radius: 12px; padding: 20px; margin-bottom: 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06); border: 1px solid var(--border);
+    }
+    .card-header {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+      margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border);
+    }
+    .card-header h3 { margin: 0; font-size: 18px; color: var(--primary); }
+
+    /* Unregistered Banner */
     .new-key-banner {
-      background: #fef3c7; border: 2px solid #f59e0b; border-radius: 12px; padding: 18px;
-      margin-bottom: 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
-      animation: pulse 2s infinite;
+      background: #fef3c7; border: 2px solid #f59e0b; border-radius: 12px; padding: 16px 20px;
+      margin-bottom: 20px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
     }
-    @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); } 50% { box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); } }
+    .new-key-banner strong { color: #92400e; font-size: 16px; }
 
-    /* Tabs */
-    .tabs { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 2px solid var(--border); padding-bottom: 10px; overflow-x: auto; }
-    .tab-btn { background: transparent; color: var(--muted); padding: 10px 18px; border-radius: 8px; font-weight: 700; white-space: nowrap; }
-    .tab-btn.active { background: var(--primary); color: white; }
+    /* Guest Unlock Box */
+    .guest-bar {
+      background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 12px; padding: 16px;
+      display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 20px;
+    }
+    .guest-bar input { max-width: 280px; }
 
-    /* Cards & Tables */
-    .card { background: var(--card); border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 20px; }
-    .card h2 { margin-top: 0; font-size: 20px; color: var(--primary); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
-    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 16px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 12px; }
-    th, td { text-align: right; padding: 12px; border-bottom: 1px solid var(--border); }
-    th { background: #f8fafc; font-weight: 700; color: var(--muted); font-size: 14px; }
-    .badge { padding: 4px 10px; border-radius: 20px; font-size: 13px; font-weight: 600; display: inline-block; }
-    .badge-in { background: #dcfce7; color: #166534; }
-    .badge-out { background: #fee2e2; color: #991b1b; }
-    .badge-admin { background: #dbeafe; color: #1e40af; }
-    .badge-user { background: #f1f5f9; color: #475569; }
-    .status-dot { height: 10px; width: 10px; border-radius: 50%; display: inline-block; margin-left: 6px; }
-    .online { background: #22c55e; box-shadow: 0 0 6px #22c55e; }
-    .offline { background: #94a3b8; }
+    /* Tables */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { padding: 11px 12px; text-align: right; border-bottom: 1px solid var(--border); }
+    th { background: #f8fafc; font-weight: 700; color: #334155; }
+    tr:hover { background: #f8fafc; }
+    .pill {
+      padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; display: inline-block;
+    }
+    .pill-in { background: #dcfce7; color: #166534; }
+    .pill-out { background: #fee2e2; color: #991b1b; }
+    .pill-admin { background: #e0e7ff; color: #1e40af; }
+    .pill-user { background: #f1f5f9; color: #475569; }
+
+    /* Filters Grid */
+    .filter-bar {
+      display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end;
+      background: #f8fafc; padding: 14px; border-radius: 10px; margin-bottom: 16px; border: 1px solid var(--border);
+    }
+    .filter-item { display: flex; flex-direction: column; gap: 4px; }
+    .filter-item label { font-size: 12px; font-weight: 600; color: var(--muted); }
+
+    /* Grid 2 Cols */
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
 
     /* Modal */
     .modal-backdrop {
-      position: fixed; inset: 0; background: rgba(15,23,42,0.6); display: flex; align-items: center; justify-content: center; z-index: 50; padding: 16px;
+      position: fixed; inset: 0; background: rgba(15,23,42,0.6); display: flex;
+      align-items: center; justify-content: center; padding: 20px; z-index: 1000;
     }
-    .modal { background: white; border-radius: 14px; padding: 24px; max-width: 480px; width: 100%; max-height: 85vh; overflow-y: auto; }
-    .perm-list { max-height: 220px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin: 10px 0; }
-    .perm-item { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid #f1f5f9; }
+    .modal {
+      background: #fff; border-radius: 14px; padding: 24px; width: 100%; max-width: 500px;
+      max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+    .modal h3 { margin-top: 0; color: var(--primary); }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+    .user-checklist {
+      max-height: 160px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; padding: 8px;
+    }
+    .user-checklist label { display: flex; align-items: center; gap: 8px; padding: 4px 0; cursor: pointer; }
+
+    /* Print Styles */
+    @media print {
+      header, nav.tabs, .no-print, .filter-bar, .btn { display: none !important; }
+      body { background: #fff; }
+      .container { margin: 0; padding: 0; max-width: 100%; }
+      .card { box-shadow: none; border: none; padding: 0; }
+      #print-header { display: block !important; margin-bottom: 16px; border-bottom: 2px solid #000; padding-bottom: 8px; }
+    }
+    #print-header { display: none; }
   </style>
 </head>
 <body>
 
-  <!-- Login Screen -->
-  <div id="login-screen">
-    <div class="login-card">
-      <div class="logo-badge">SKC</div>
-      <h2 style="margin: 0 0 8px 0;">ניהול ארונות מפתחות חכמים</h2>
-      <p style="color: var(--muted); margin-bottom: 24px;">התחבר למערכת הענן לניהול צי הארונות וההרשאות</p>
-      <input type="email" id="login-email" placeholder="כתובת אימייל" style="width: 100%; margin-bottom: 12px;">
-      <input type="password" id="login-pass" placeholder="סיסמה" style="width: 100%; margin-bottom: 18px;">
-      <button class="btn-primary" style="width: 100%; padding: 12px;" onclick="login()">כניסה למערכת</button>
-      <p id="login-error" style="color: var(--danger); font-size: 14px; margin-top: 12px;"></p>
+  <!-- AUTH SCREEN -->
+  <div id="auth-screen">
+    <div class="auth-box">
+      <h1>SKC Cloud Admin</h1>
+      <p>מערכת ניהול ובקרת ארונות מפתחות חכמים</p>
+      <div class="form-group">
+        <label>כתובת אימייל</label>
+        <input type="email" id="login-email" class="form-control" placeholder="admin@organization.com" />
+      </div>
+      <div class="form-group">
+        <label>סיסמה</label>
+        <input type="password" id="login-pass" class="form-control" placeholder="••••••••" />
+      </div>
+      <button class="btn btn-primary" style="width:100%; justify-content:center;" onclick="handleLogin()">התחברות למערכת</button>
+      <p id="auth-error" style="color:var(--danger); margin-top:12px; font-weight:600;"></p>
     </div>
   </div>
 
-  <!-- Main App -->
+  <!-- MAIN APP -->
   <div id="app-screen" class="hidden">
     <header>
-      <div class="header-right">
-        <strong style="font-size: 22px; letter-spacing: 1px;">SKC CLOUD</strong>
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <select id="cabinet-selector" onchange="selectCabinet(this.value)" style="min-width: 220px; font-weight: 600;"></select>
-          <button class="btn-outline btn-sm" onclick="openAddCabinetModal()">+ הוסף ארון</button>
-        </div>
+      <div class="brand">
+        <h2>SKC | ניהול ארונות מפתחות</h2>
+        <span id="cab-status-pill" class="status-pill status-offline">לא מחובר</span>
       </div>
-      <div class="header-left">
-        <span id="cab-status-badge" style="font-size: 14px; background: rgba(0,0,0,0.2); padding: 6px 12px; border-radius: 20px;">
-          <span class="status-dot offline" id="status-dot"></span>
-          <span id="status-text">ממתין לבחירת ארון</span>
-        </span>
-        <button class="btn-success btn-sm" onclick="remoteUnlock()">🔓 פתח דלת כעת</button>
-        <button class="btn-outline btn-sm" onclick="logout()">יציאה</button>
+      <div class="cab-selector">
+        <select id="cabinet-select" onchange="switchCabinet()"></select>
+        <button class="btn btn-success btn-sm" onclick="openAddCabinetModal()">+ הוסף ארון</button>
+        <button class="btn btn-outline btn-sm" onclick="handleLogout()">יציאה</button>
       </div>
     </header>
 
+    <nav class="tabs">
+      <button class="tab-btn active" id="tab-btn-keys" onclick="switchTab('keys')">ניהול מפתחות</button>
+      <button class="tab-btn" id="tab-btn-users" onclick="switchTab('users')">ניהול עובדים</button>
+      <button class="tab-btn" id="tab-btn-settings" onclick="switchTab('settings')">הגדרות ארון</button>
+      <button class="tab-btn" id="tab-btn-alerts" onclick="switchTab('alerts')">
+        התראות <span id="alerts-badge" class="badge-alert hidden">0</span>
+      </button>
+      <button class="tab-btn" id="tab-btn-logs" onclick="switchTab('logs')">יומן תנועות והיסטוריה</button>
+    </nav>
+
     <div class="container">
-      <!-- New Unregistered Key Alert Banner -->
-      <div id="new-key-banner" class="new-key-banner hidden">
+      <!-- UNREGISTERED KEY BANNER -->
+      <div id="unregistered-banner" class="new-key-banner hidden">
         <div>
-          <strong style="font-size: 18px; color: #92400e;">🔑 זוהה מפתח חדש לא רשום בארון!</strong>
-          <div style="font-size: 14px; color: #78350f; margin-top: 4px;">
-            תא מספר: <strong id="nk-slot">-</strong> | מזהה שבב: <code id="nk-id" style="background: rgba(255,255,255,0.6); padding: 2px 6px; border-radius: 4px;">-</code>
+          <strong>זוהה מפתח חדש לא רשום בארון!</strong>
+          <div style="font-size:13px; margin-top:4px;">
+            מזהה שבב: <code id="unreg-rom"></code> | תא נוכחי: <strong id="unreg-slot"></strong>
           </div>
         </div>
-        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-          <input type="text" id="nk-name" placeholder="הזן שם למפתח (למשל: מעבדת מחשבים)" style="min-width: 240px;">
-          <button class="btn-success" onclick="registerDetectedKey()">שמור מפתח במערכת</button>
-          <button class="btn-outline" style="color: #78350f; border-color: #d97706;" onclick="dismissDetectedKey()">התעלם</button>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+          <input type="text" id="unreg-name-input" class="form-control" style="width:220px;" placeholder="הזן שם למפתח (למשל: מעבדה)" />
+          <button class="btn btn-success" onclick="registerNewKey()">שמור מפתח</button>
+          <button class="btn btn-outline btn-sm" onclick="dismissUnregisteredKey()">התעלם</button>
         </div>
       </div>
 
-      <!-- Navigation Tabs -->
-      <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('keys', this)">🔑 ניהול מפתחות והרשאות</button>
-        <button class="tab-btn" onclick="switchTab('users', this)">👥 ניהול עובדים וייבוא</button>
-        <button class="tab-btn" onclick="switchTab('logs', this)">📋 יומן תנועות והיסטוריה</button>
-        <button class="tab-btn" onclick="switchTab('settings', this)">⚙️ הגדרות ארון</button>
-      </div>
+      <!-- TAB 1: KEYS -->
+      <div id="tab-keys">
+        <div class="guest-bar">
+          <div style="font-weight:700; color:var(--primary);">פתיחת דלת מרחוק / מסירת מפתח לאורח:</div>
+          <input type="text" id="guest-name-input" class="form-control" placeholder="שם אורח / מבקר (אופציונלי)" />
+          <button class="btn btn-primary" onclick="remoteUnlockDoor()">פתח דלת כעת</button>
+          <span id="unlock-feedback" style="font-size:13px; color:var(--success); font-weight:600;"></span>
+        </div>
 
-      <!-- Tab 1: Keys -->
-      <div id="tab-keys" class="tab-content">
         <div class="card">
-          <h2>
-            <span>רשימת מפתחות בארון (<span id="keys-count">0</span>)</span>
-            <button class="btn-primary btn-sm" onclick="openManualKeyModal()">+ הוסף מפתח ידנית</button>
-          </h2>
-          <p style="color: var(--muted); font-size: 14px; margin-top: -8px;">הכנס פלאג מפתח לכל שקע פנוי בארון כדי לזהותו אוטומטית, או הגדר הרשאות לכל מפתח קיים.</p>
-          <div style="overflow-x: auto;">
+          <div class="card-header">
+            <h3>רשימת מפתחות בארון (<span id="keys-count">0</span>)</h3>
+          </div>
+          <div class="table-wrap">
             <table>
               <thead>
                 <tr>
-                  <th>מיקום נוכחי</th>
                   <th>שם המפתח</th>
-                  <th>מזהה שבב (ID)</th>
-                  <th>סטטוס</th>
-                  <th>הרשאת גישה</th>
+                  <th>מזהה שבב (ROM)</th>
+                  <th>מיקום (תא)</th>
+                  <th>סטטוס נוכחי</th>
+                  <th>מחזיק נוכחי</th>
+                  <th>הרשאות גישה</th>
                   <th>פעולות</th>
                 </tr>
               </thead>
@@ -182,33 +261,23 @@
         </div>
       </div>
 
-      <!-- Tab 2: Users -->
-      <div id="tab-users" class="tab-content hidden">
+      <!-- TAB 2: USERS -->
+      <div id="tab-users" class="hidden">
         <div class="card">
-          <h2>
-            <span>הוספת עובד חדש</span>
-            <div>
-              <input type="file" id="csv-file-input" accept=".csv" class="hidden" onchange="handleCSVUpload(event)">
-              <button class="btn-success btn-sm" onclick="document.getElementById('csv-file-input').click()">📥 ייבוא מאקסל (CSV)</button>
+          <div class="card-header">
+            <h3>ניהול עובדים ומורשים (<span id="users-count">0</span>)</h3>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <label class="btn btn-outline" style="cursor:pointer;">
+                ייבוא מקובץ Excel (CSV)
+                <input type="file" id="csv-upload" accept=".csv" class="hidden" onchange="importUsersCSV(event)" />
+              </label>
+              <button class="btn btn-primary" onclick="openUserModal()">+ הוסף עובד</button>
             </div>
-          </h2>
-          <div class="form-grid">
-            <input type="text" id="u-id" placeholder="תעודת זהות (חובה)">
-            <input type="text" id="u-name" placeholder="שם מלא (חובה)">
-            <input type="tel" id="u-phone" placeholder="מספר טלפון">
-            <input type="email" id="u-email" placeholder="אימייל">
-            <select id="u-role">
-              <option value="user">עובד רגיל (User)</option>
-              <option value="admin">מנהל מערכת (Admin)</option>
-            </select>
-            <button class="btn-primary" onclick="saveUser()">+ שמור עובד</button>
           </div>
-          <p style="font-size: 13px; color: var(--muted); margin: 0;">פורמט קובץ CSV לייבוא מאקסל: עמודות לפי הסדר <code>ת.ז, שם מלא, טלפון, מייל, תפקיד (admin/user)</code> (שמור כ-CSV UTF-8).</p>
-        </div>
-
-        <div class="card">
-          <h2>רשימת עובדים מורשים (<span id="users-count">0</span>)</h2>
-          <div style="overflow-x: auto;">
+          <p style="font-size:12px; color:var(--muted); margin-top:-8px;">
+            מבנה קובץ CSV לייבוא: <code>ת.ז, שם מלא, טלפון, אימייל, הרשאה (admin/user)</code>
+          </p>
+          <div class="table-wrap">
             <table>
               <thead>
                 <tr>
@@ -226,22 +295,153 @@
         </div>
       </div>
 
-      <!-- Tab 3: Logs -->
-      <div id="tab-logs" class="tab-content hidden">
+      <!-- TAB 3: CABINET SETTINGS -->
+      <div id="tab-settings" class="hidden">
         <div class="card">
-          <h2>
-            <span>יומן תנועות אחרונות</span>
-            <button class="btn-primary btn-sm" onclick="exportLogsCSV()">📤 ייצוא לאקסל (CSV)</button>
-          </h2>
-          <div style="overflow-x: auto;">
+          <div class="card-header">
+            <h3>פרטי והגדרות ארון</h3>
+          </div>
+          <div class="grid-2">
+            <div>
+              <div class="form-group">
+                <label>קוד זיהוי חומרה (Cabinet ID)</label>
+                <input type="text" id="set-cab-id" class="form-control" disabled />
+              </div>
+              <div class="form-group">
+                <label>שם הארון / מיקום</label>
+                <input type="text" id="set-cab-name" class="form-control" />
+              </div>
+              <button class="btn btn-primary" onclick="saveCabinetSettings()">שמור שם ארון</button>
+            </div>
+            <div style="border-right:1px solid var(--border); padding-right:20px;">
+              <h4 style="color:var(--danger); margin-top:0;">אזור ניהול מתקדם</h4>
+              <p style="font-size:13px; color:var(--muted);">
+                הסרת הארון תנתק אותו מחשבון הניהול הנוכחי. פעולה זו דורשת סיסמת מנהל-על.
+              </p>
+              <button class="btn btn-danger" onclick="deleteCurrentCabinet()">מחק ארון מהמערכת</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: ALERTS -->
+      <div id="tab-alerts" class="hidden">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <h3>הגדרות שעות יעד להתראות</h3>
+            </div>
+            <div class="form-group">
+              <label>שעת יעד להחזרת מפתח (התראה לעובד ותצוגה במסך)</label>
+              <input type="time" id="alert-user-time" class="form-control" value="16:00" />
+            </div>
+            <div class="form-group">
+              <label>שעת דיווח מרוכז למנהלי המערכת</label>
+              <input type="time" id="alert-admin-time" class="form-control" value="18:00" />
+            </div>
+            <div class="form-group">
+              <label>מייל מנהל ראשי נוסף לדיווח (אופציונלי, בנוסף למנהלים ברשימת העובדים)</label>
+              <input type="email" id="alert-extra-admin-email" class="form-control" placeholder="manager@school.org.il" />
+            </div>
+            <button class="btn btn-primary" onclick="saveAlertSettings()">שמור הגדרות התראות</button>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3>חיבור שליחת מיילים אוטומטית (Gmail / EmailJS)</h3>
+            </div>
+            <p style="font-size:12px; color:var(--muted); margin-top:0;">
+              אופציונלי: הזן מפתחות חשבון EmailJS (מחובר ל-Gmail) לשליחה אוטומטית ברקע. ללא מפתחות, הכפתורים יפתחו הודעת Gmail מוכנה לשליחה.
+            </p>
+            <div class="form-group">
+              <label>EmailJS Public Key</label>
+              <input type="text" id="ejs-public-key" class="form-control" placeholder="לדוגמה: user_xYz123..." />
+            </div>
+            <div class="form-group">
+              <label>Service ID</label>
+              <input type="text" id="ejs-service-id" class="form-control" placeholder="לדוגמה: service_gmail" />
+            </div>
+            <div class="form-group">
+              <label>Template ID</label>
+              <input type="text" id="ejs-template-id" class="form-control" placeholder="לדוגמה: template_alert" />
+            </div>
+            <button class="btn btn-outline" onclick="saveEmailJsSettings()">שמור פרטי EmailJS</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>מפתחות שטרם הוחזרו וחרגו משעת היעד (<span id="overdue-count">0</span>)</h3>
+            <button class="btn btn-danger" onclick="sendAdminSummaryAlert()">שלח דוח חריגים למנהלי המערכת</button>
+          </div>
+          <div id="alert-status-banner" style="margin-bottom:12px; font-size:14px; font-weight:600;"></div>
+          <div class="table-wrap">
             <table>
               <thead>
                 <tr>
-                  <th>תאריך ושעה</th>
+                  <th>שם המפתח</th>
+                  <th>מחזיק נוכחי</th>
+                  <th>מייל העובד</th>
+                  <th>שעת לקיחה</th>
+                  <th>שעת יעד</th>
                   <th>פעולה</th>
-                  <th>מפתח</th>
+                </tr>
+              </thead>
+              <tbody id="alerts-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 5: LOGS & HISTORY -->
+      <div id="tab-logs" class="hidden">
+        <div class="card">
+          <div id="print-header">
+            <h2 style="margin:0;">דוח תנועות מפתחות - מערכת SKC</h2>
+            <p id="print-meta" style="margin:4px 0 0; font-size:13px;"></p>
+          </div>
+          <div class="card-header">
+            <h3>יומן תנועות והיסטוריה</h3>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="btn btn-success" onclick="exportFilteredLogsCSV()">ייצוא לאקסל (CSV)</button>
+              <button class="btn btn-outline" onclick="printFilteredLogs()">הדפסה</button>
+            </div>
+          </div>
+
+          <div class="filter-bar">
+            <div class="filter-item">
+              <label>סוג תצוגה / סינון</label>
+              <select id="log-filter-type" class="form-control" onchange="renderLogs()">
+                <option value="all">כל התנועות</option>
+                <option value="take">לקיחת מפתח בלבד</option>
+                <option value="return">החזרת מפתח בלבד</option>
+                <option value="unreturned">מפתחות שטרם הוחזרו</option>
+              </select>
+            </div>
+            <div class="filter-item">
+              <label>מתאריך</label>
+              <input type="date" id="log-filter-from" class="form-control" onchange="renderLogs()" />
+            </div>
+            <div class="filter-item">
+              <label>עד תאריך</label>
+              <input type="date" id="log-filter-to" class="form-control" onchange="renderLogs()" />
+            </div>
+            <div class="filter-item">
+              <button class="btn btn-outline" onclick="resetLogFilters()">איפוס סינון</button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>תאריך</th>
+                  <th>שעה</th>
+                  <th>סוג פעולה</th>
+                  <th>שם המפתח</th>
                   <th>תא</th>
-                  <th>עובד</th>
+                  <th>עובד / אורח</th>
+                  <th>ת.ז.</th>
                 </tr>
               </thead>
               <tbody id="logs-tbody"></tbody>
@@ -249,80 +449,96 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
 
-      <!-- Tab 4: Settings -->
-      <div id="tab-settings" class="tab-content hidden">
-        <div class="card">
-          <h2>הגדרות ארון נוכחי (<span id="settings-cab-id">-</span>)</h2>
-          <div class="form-grid" style="max-width: 600px;">
-            <div>
-              <label style="font-size: 13px; font-weight: 700;">שם הארון (יוצג במסך)</label>
-              <input type="text" id="set-cab-name" style="width: 100%; margin-top: 4px;">
-            </div>
-            <div>
-              <label style="font-size: 13px; font-weight: 700;">קוד טכנאי למסך המגע</label>
-              <input type="text" id="set-tech-pin" placeholder="ברירת מחדל: 9999" style="width: 100%; margin-top: 4px;">
-            </div>
-          </div>
-          <button class="btn-primary" onclick="saveCabinetSettings()">שמור הגדרות ארון</button>
-
-          <hr style="margin: 30px 0; border: 0; border-top: 1px solid var(--border);">
-          <h3 style="color: var(--danger); margin-bottom: 8px;">אזור ניהול מתקדם</h3>
-          <p style="font-size: 14px; color: var(--muted);">מחיקת הארון תנתק אותו מחשבון הניהול הנוכחי (דורש סיסמת מנהל-על).</p>
-          <button class="btn-danger" onclick="deleteCurrentCabinet()">🗑️ מחק ארון מהמערכת</button>
-        </div>
+  <!-- MODAL: ADD CABINET -->
+  <div id="modal-add-cab" class="modal-backdrop hidden">
+    <div class="modal">
+      <h3>הוספת ארון חדש</h3>
+      <div class="form-group">
+        <label>קוד זיהוי ארון (מופיע במסך הטכנאי, לדוגמה SKC-6C6024)</label>
+        <input type="text" id="new-cab-id" class="form-control" placeholder="SKC-XXXXXX" style="text-transform:uppercase;" />
+      </div>
+      <div class="form-group">
+        <label>שם הארון</label>
+        <input type="text" id="new-cab-name" class="form-control" placeholder="לדוגמה: ארון חדר מורים" />
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('modal-add-cab')">ביטול</button>
+        <button class="btn btn-primary" onclick="confirmAddCabinet()">הוסף ארון</button>
       </div>
     </div>
   </div>
 
-  <!-- Add Cabinet Modal -->
-  <div id="add-cab-modal" class="modal-backdrop hidden">
+  <!-- MODAL: EDIT KEY PERMISSIONS -->
+  <div id="modal-edit-key" class="modal-backdrop hidden">
     <div class="modal">
-      <h3 style="margin-top: 0;">הוספת ארון חדש לצי</h3>
-      <p style="font-size: 14px; color: var(--muted);">הזן את קוד הזיהוי המופיע במסך הטכנאי בארון (לדוגמה: <code>SKC-6C6024</code>).</p>
-      <input type="text" id="new-cab-id" placeholder="קוד ארון (SKC-XXXXXX)" style="width: 100%; margin-bottom: 12px; text-transform: uppercase;">
-      <input type="text" id="new-cab-name" placeholder="שם הארון (למשל: ארון מפתחות ראשי)" style="width: 100%; margin-bottom: 18px;">
-      <div style="display: flex; gap: 10px; justify-content: flex-end;">
-        <button class="btn-outline" style="color: var(--text); border-color: var(--border);" onclick="closeModal('add-cab-modal')">ביטול</button>
-        <button class="btn-primary" onclick="addCabinet()">שמור וקשר ארון</button>
+      <h3>עריכת מפתח והרשאות</h3>
+      <input type="hidden" id="edit-key-id" />
+      <div class="form-group">
+        <label>שם המפתח</label>
+        <input type="text" id="edit-key-name" class="form-control" />
       </div>
-    </div>
-  </div>
-
-  <!-- Key Permissions Modal -->
-  <div id="perm-modal" class="modal-backdrop hidden">
-    <div class="modal">
-      <h3 style="margin-top: 0;">הגדרת הרשאות למפתח: <span id="pm-key-name"></span></h3>
-      <input type="hidden" id="pm-key-id">
-      <div style="margin-bottom: 12px;">
-        <label style="font-size: 13px; font-weight: 700;">שם המפתח:</label>
-        <input type="text" id="pm-edit-name" style="width: 100%; margin-top: 4px;">
-      </div>
-      <div style="margin-bottom: 12px;">
-        <label style="font-size: 13px; font-weight: 700;">מדיניות גישה:</label>
-        <select id="pm-access-mode" style="width: 100%; margin-top: 4px;" onchange="toggleSpecificUsers(this.value)">
-          <option value="all">פתוח לכל העובדים המורשים (רגיל + מנהל)</option>
-          <option value="admins">מנהלים בלבד (Admins Only)</option>
-          <option value="specific">עובדים ספציפיים בלבד (בחירה ידנית)</option>
+      <div class="form-group">
+        <label>מדיניות הרשאות</label>
+        <select id="edit-key-mode" class="form-control" onchange="toggleSpecificUsersList()">
+          <option value="all">פתוח לכולם (כל העובדים והמנהלים)</option>
+          <option value="admin">מנהלי מערכת בלבד (Admin)</option>
+          <option value="specific">עובדים נבחרים בלבד</option>
         </select>
       </div>
-      <div id="pm-users-box" class="hidden">
-        <label style="font-size: 13px; font-weight: 700;">בחר עובדים מורשים למפתח זה:</label>
-        <div class="perm-list" id="pm-users-list"></div>
+      <div id="specific-users-box" class="form-group hidden">
+        <label>בחר עובדים מורשים:</label>
+        <div id="specific-users-list" class="user-checklist"></div>
       </div>
-      <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px;">
-        <button class="btn-outline" style="color: var(--text); border-color: var(--border);" onclick="closeModal('perm-modal')">ביטול</button>
-        <button class="btn-primary" onclick="saveKeyPermissions()">שמור שינויים</button>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('modal-edit-key')">ביטול</button>
+        <button class="btn btn-primary" onclick="saveKeyEdit()">שמור שינויים</button>
       </div>
     </div>
   </div>
 
-  <!-- Firebase SDKs (Compat for single-file simplicity) -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <!-- MODAL: ADD/EDIT USER -->
+  <div id="modal-user" class="modal-backdrop hidden">
+    <div class="modal">
+      <h3 id="user-modal-title">הוספת עובד חדש</h3>
+      <div class="form-group">
+        <label>תעודת זהות (9 ספרות)</label>
+        <input type="text" id="u-id" class="form-control" placeholder="123456789" />
+      </div>
+      <div class="form-group">
+        <label>שם מלא</label>
+        <input type="text" id="u-name" class="form-control" placeholder="ישראל ישראלי" />
+      </div>
+      <div class="form-group">
+        <label>טלפון</label>
+        <input type="tel" id="u-phone" class="form-control" placeholder="050-0000000" />
+      </div>
+      <div class="form-group">
+        <label>כתובת אימייל (להתראות החזרה)</label>
+        <input type="email" id="u-email" class="form-control" placeholder="user@example.com" />
+      </div>
+      <div class="form-group">
+        <label>רמת הרשאה</label>
+        <select id="u-role" class="form-control">
+          <option value="user">משתמש רגיל (User)</option>
+          <option value="admin">מנהל מערכת (Admin)</option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('modal-user')">ביטול</button>
+        <button class="btn btn-primary" onclick="saveUser()">שמור עובד</button>
+      </div>
+    </div>
+  </div>
 
-  <script>
+  <!-- FIREBASE SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getDatabase, ref, onValue, set, update, remove, get, off } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
     const firebaseConfig = {
       apiKey: "AIzaSyBIzyJLktKik5jQE2dc_Oc6eeplZT-97LI",
       authDomain: "skc-cloud-c4f27.firebaseapp.com",
@@ -333,377 +549,592 @@
       appId: "1:38570646019:web:21ea1854758af752a7cc36"
     };
 
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.database();
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
 
     let currentUser = null;
-    let currentCabId = null;
-    let cabListener = null;
-    let cabData = {};
-    let detectedUnregistered = null;
+    let orgCabinets = {};
+    let currentCabId = "";
+    let currentCabData = {};
+    let cabListenerRef = null;
+    let filteredLogsCache = [];
 
-    // Auth Listener
-    auth.onAuthStateChanged(user => {
+    // Auth State Observer
+    onAuthStateChanged(auth, (user) => {
       if (user) {
         currentUser = user;
-        document.getElementById('login-screen').classList.add('hidden');
-        document.getElementById('app-screen').classList.remove('hidden');
+        document.getElementById("auth-screen").classList.add("hidden");
+        document.getElementById("app-screen").classList.remove("hidden");
         loadOrgCabinets();
       } else {
         currentUser = null;
-        document.getElementById('login-screen').classList.remove('hidden');
-        document.getElementById('app-screen').classList.add('hidden');
+        document.getElementById("auth-screen").classList.remove("hidden");
+        document.getElementById("app-screen").classList.add("hidden");
       }
     });
 
-    function login() {
-      const email = document.getElementById('login-email').value.trim();
-      const pass = document.getElementById('login-pass').value;
-      document.getElementById('login-error').innerText = "";
-      auth.signInWithEmailAndPassword(email, pass).catch(err => {
-        document.getElementById('login-error').innerText = "שגיאת התחברות: " + err.message;
-      });
-    }
+    window.handleLogin = async () => {
+      const email = document.getElementById("login-email").value.trim();
+      const pass = document.getElementById("login-pass").value;
+      const errEl = document.getElementById("auth-error");
+      errEl.textContent = "";
+      try {
+        await signInWithEmailAndPassword(auth, email, pass);
+      } catch (e) {
+        errEl.textContent = "שגיאת התחברות: בדוק אימייל וסיסמה";
+      }
+    };
 
-    function logout() { auth.signOut(); }
+    window.handleLogout = () => signOut(auth);
 
     function loadOrgCabinets() {
-      const ref = db.ref(`organizations/${currentUser.uid}/cabinets`);
-      ref.on('value', snap => {
-        const sel = document.getElementById('cabinet-selector');
-        const prev = sel.value;
+      const orgCabRef = ref(db, `organizations/${currentUser.uid}/cabinets`);
+      onValue(orgCabRef, (snap) => {
+        orgCabinets = snap.val() || {};
+        const sel = document.getElementById("cabinet-select");
+        const prev = currentCabId;
         sel.innerHTML = "";
-        const cabs = snap.val() || {};
-        const ids = Object.keys(cabs);
+        const ids = Object.keys(orgCabinets);
         if (ids.length === 0) {
-          sel.innerHTML = '<option value="">אין ארונות מקושרים - לחץ + הוסף ארון</option>';
-          currentCabId = null;
+          sel.innerHTML = '<option value="">אין ארונות משויכים - לחץ + הוסף ארון</option>';
+          currentCabId = "";
           return;
         }
-        ids.forEach(id => {
-          const opt = document.createElement('option');
+        ids.forEach((id) => {
+          const opt = document.createElement("option");
           opt.value = id;
-          opt.innerText = `${cabs[id].name || id} (${id})`;
+          opt.textContent = `${orgCabinets[id].name || id} (${id})`;
           sel.appendChild(opt);
         });
-        if (prev && ids.includes(prev)) {
-          sel.value = prev;
-        } else {
-          sel.value = ids[0];
-          selectCabinet(ids[0]);
-        }
+        currentCabId = (prev && orgCabinets[prev]) ? prev : ids[0];
+        sel.value = currentCabId;
+        subscribeToCabinet(currentCabId);
       });
     }
 
-    function selectCabinet(cabId) {
-      if (!cabId) return;
-      if (cabListener && currentCabId) {
-        db.ref(`cabinets/${currentCabId}`).off('value', cabListener);
+    window.switchCabinet = () => {
+      const sel = document.getElementById("cabinet-select");
+      if (sel.value) {
+        currentCabId = sel.value;
+        subscribeToCabinet(currentCabId);
       }
-      currentCabId = cabId;
-      document.getElementById('settings-cab-id').innerText = cabId;
+    };
 
-      cabListener = db.ref(`cabinets/${cabId}`).on('value', snap => {
-        cabData = snap.val() || {};
-        renderDashboard();
+    function subscribeToCabinet(cabId) {
+      if (!cabId) return;
+      if (cabListenerRef) off(cabListenerRef);
+      cabListenerRef = ref(db, `cabinets/${cabId}`);
+      onValue(cabListenerRef, (snap) => {
+        currentCabData = snap.val() || {};
+        renderAll();
       });
     }
 
-    function renderDashboard() {
-      // Status
-      const isOnline = cabData.online === true;
-      document.getElementById('status-dot').className = 'status-dot ' + (isOnline ? 'online' : 'offline');
-      document.getElementById('status-text').innerText = isOnline ? 'מחובר לענן' : 'לא מקוון';
+    function renderAll() {
+      // Status pill
+      const pill = document.getElementById("cab-status-pill");
+      if (currentCabData.online) {
+        pill.textContent = `מחובר (${currentCabData.lastSeen || ""})`;
+        pill.className = "status-pill status-online";
+      } else {
+        pill.textContent = "ממתין לסנכרון";
+        pill.className = "status-pill status-offline";
+      }
 
       // Settings fields
-      document.getElementById('set-cab-name').value = cabData.cabinetName || '';
-      document.getElementById('set-tech-pin').value = cabData.techPin || '9999';
+      document.getElementById("set-cab-id").value = currentCabId;
+      document.getElementById("set-cab-name").value = (orgCabinets[currentCabId] && orgCabinets[currentCabId].name) || currentCabId;
+
+      // Alert settings fields
+      const aSet = currentCabData.alertSettings || {};
+      document.getElementById("alert-user-time").value = aSet.userDeadline || "16:00";
+      document.getElementById("alert-admin-time").value = aSet.adminDeadline || "18:00";
+      document.getElementById("alert-extra-admin-email").value = aSet.extraAdminEmail || "";
+      document.getElementById("ejs-public-key").value = aSet.ejsPublicKey || "";
+      document.getElementById("ejs-service-id").value = aSet.ejsServiceId || "";
+      document.getElementById("ejs-template-id").value = aSet.ejsTemplateId || "";
 
       // Unregistered Key Banner
-      const unreg = cabData.unregisteredKey;
-      const keysObj = cabData.keys || {};
-      if (unreg && unreg.id && !keysObj[unreg.id]) {
-        detectedUnregistered = unreg;
-        document.getElementById('nk-slot').innerText = unreg.slot || '?';
-        document.getElementById('nk-id').innerText = unreg.id;
-        document.getElementById('new-key-banner').classList.remove('hidden');
+      const unreg = currentCabData.unregisteredKey;
+      const banner = document.getElementById("unregistered-banner");
+      if (unreg && unreg.romId) {
+        document.getElementById("unreg-rom").textContent = unreg.romId;
+        document.getElementById("unreg-slot").textContent = unreg.slot || "-";
+        banner.classList.remove("hidden");
       } else {
-        detectedUnregistered = null;
-        document.getElementById('new-key-banner').classList.add('hidden');
+        banner.classList.add("hidden");
       }
 
-      // Render Keys
-      const keysTbody = document.getElementById('keys-tbody');
-      keysTbody.innerHTML = '';
-      const keyIds = Object.keys(keysObj);
-      document.getElementById('keys-count').innerText = keyIds.length;
-      keyIds.forEach(kid => {
-        const k = keysObj[kid];
-        const inCab = k.slot && k.slot > 0;
-        let permText = 'פתוח לכולם';
-        if (k.access === 'admins') permText = 'מנהלים בלבד';
-        else if (k.access === 'specific') permText = `מורשים ספציפיים (${(k.allowedUsers || []).length})`;
+      renderKeys();
+      renderUsers();
+      renderAlerts();
+      renderLogs();
+    }
 
-        keysTbody.innerHTML += `
-          <tr>
-            <td><strong>${inCab ? 'תא ' + k.slot : 'מחוץ לארון'}</strong></td>
-            <td>${k.name || 'ללא שם'}</td>
-            <td><code>${kid}</code></td>
-            <td><span class="badge ${inCab ? 'badge-in' : 'badge-out'}">${inCab ? 'בארון' : 'נלקח ע"י ' + (k.holderName || 'עובד')}</span></td>
-            <td>${permText}</td>
-            <td>
-              <button class="btn-primary btn-sm" onclick="openPermModal('${kid}')">הרשאות / עריכה</button>
-              <button class="btn-danger btn-sm" onclick="deleteKey('${kid}')">מחק</button>
-            </td>
-          </tr>
-        `;
-      });
+    function renderKeys() {
+      const keysObj = currentCabData.keys || {};
+      const tbody = document.getElementById("keys-tbody");
+      tbody.innerHTML = "";
+      const list = Object.entries(keysObj);
+      document.getElementById("keys-count").textContent = list.length;
 
-      // Render Users
-      const usersObj = cabData.users || {};
-      const usersTbody = document.getElementById('users-tbody');
-      usersTbody.innerHTML = '';
-      const userIds = Object.keys(usersObj);
-      document.getElementById('users-count').innerText = userIds.length;
-      userIds.forEach(uid => {
-        const u = usersObj[uid];
-        const isAdmin = u.role === 'admin';
-        usersTbody.innerHTML += `
-          <tr>
-            <td><strong>${uid}</strong></td>
-            <td>${u.name || ''}</td>
-            <td>${u.phone || '-'}</td>
-            <td>${u.email || '-'}</td>
-            <td><span class="badge ${isAdmin ? 'badge-admin' : 'badge-user'}">${isAdmin ? 'מנהל (Admin)' : 'עובד רגיל'}</span></td>
-            <td><button class="btn-danger btn-sm" onclick="deleteUser('${uid}')">הסר</button></td>
-          </tr>
+      list.forEach(([kId, k]) => {
+        const isIn = k.status === "in" || k.isPresent === true;
+        const modeMap = { all: "פתוח לכולם", admin: "מנהלים בלבד", specific: "עובדים נבחרים" };
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${k.name || "-"}</strong></td>
+          <td><code>${k.romId || kId}</code></td>
+          <td>${isIn && k.slot ? `תא ${k.slot}` : "-"}</td>
+          <td><span class="pill ${isIn ? "pill-in" : "pill-out"}">${isIn ? "זמין בארון" : "בחוץ / בשימוש"}</span></td>
+          <td>${!isIn ? (k.holderName || "לא ידוע") : "-"}</td>
+          <td>${modeMap[k.accessMode || "all"]}</td>
+          <td>
+            <button class="btn btn-outline btn-sm" onclick="openEditKeyModal('${kId}')">הרשאות</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteKey('${kId}')">מחק</button>
+          </td>
         `;
-      });
-
-      // Render Logs
-      const logsObj = cabData.logs || {};
-      const logsTbody = document.getElementById('logs-tbody');
-      logsTbody.innerHTML = '';
-      const logKeys = Object.keys(logsObj).reverse().slice(0, 100);
-      logKeys.forEach(lk => {
-        const l = logsObj[lk];
-        logsTbody.innerHTML += `
-          <tr>
-            <td dir="ltr" style="text-align:right;">${l.time || '-'}</td>
-            <td><strong>${l.action || '-'}</strong></td>
-            <td>${l.keyName || l.keyId || '-'}</td>
-            <td>${l.slot ? 'תא ' + l.slot : '-'}</td>
-            <td>${l.userName || l.userId || '-'}</td>
-          </tr>
-        `;
+        tbody.appendChild(tr);
       });
     }
+
+    function renderUsers() {
+      const usersObj = currentCabData.users || {};
+      const tbody = document.getElementById("users-tbody");
+      tbody.innerHTML = "";
+      const list = Object.entries(usersObj);
+      document.getElementById("users-count").textContent = list.length;
+
+      list.forEach(([uId, u]) => {
+        const isAdmin = u.role === "admin";
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><code>${u.id || uId}</code></td>
+          <td><strong>${u.name || "-"}</strong></td>
+          <td>${u.phone || "-"}</td>
+          <td>${u.email || "-"}</td>
+          <td><span class="pill ${isAdmin ? "pill-admin" : "pill-user"}">${isAdmin ? "מנהל מערכת" : "משתמש רגיל"}</span></td>
+          <td>
+            <button class="btn btn-outline btn-sm" onclick="openUserModal('${uId}')">ערוך</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteUser('${uId}')">מחק</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderAlerts() {
+      const keysObj = currentCabData.keys || {};
+      const usersObj = currentCabData.users || {};
+      const aSet = currentCabData.alertSettings || {};
+      const userDeadline = aSet.userDeadline || "16:00";
+
+      const now = new Date();
+      const nowHHMM = String(now.getHours()).padStart(2, "0") + ":" + String(now.getMinutes()).padStart(2, "0");
+      const isPastUserDeadline = nowHHMM >= userDeadline;
+
+      const tbody = document.getElementById("alerts-tbody");
+      tbody.innerHTML = "";
+
+      const outKeys = Object.entries(keysObj).filter(([_, k]) => k.status !== "in" && k.isPresent !== true);
+      const overdueKeys = isPastUserDeadline ? outKeys : [];
+
+      const badge = document.getElementById("alerts-badge");
+      document.getElementById("overdue-count").textContent = overdueKeys.length;
+      if (overdueKeys.length > 0) {
+        badge.textContent = overdueKeys.length;
+        badge.classList.remove("hidden");
+      } else {
+        badge.classList.add("hidden");
+      }
+
+      const statusBanner = document.getElementById("alert-status-banner");
+      if (!isPastUserDeadline) {
+        statusBanner.innerHTML = `<span style="color:var(--muted);">השעה כעת ${nowHHMM}. התראות חריגה יוצגו כאן אוטומטית החל מהשעה ${userDeadline} (כרגע יש ${outKeys.length} מפתחות מחוץ לארון).</span>`;
+      } else if (overdueKeys.length === 0) {
+        statusBanner.innerHTML = `<span style="color:var(--success);">כל המפתחות הוחזרו לארון בזמן!</span>`;
+      } else {
+        statusBanner.innerHTML = `<span style="color:var(--danger);">שימו לב: ${overdueKeys.length} מפתחות טרם הוחזרו לאחר שעת היעד (${userDeadline})!</span>`;
+      }
+
+      overdueKeys.forEach(([kId, k]) => {
+        const holder = k.holderName || "לא ידוע";
+        let matchedEmail = "";
+        Object.values(usersObj).forEach((u) => {
+          if (u.name && holder.includes(u.name) && u.email) matchedEmail = u.email;
+        });
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${k.name}</strong></td>
+          <td>${holder}</td>
+          <td>${matchedEmail || '<span style="color:var(--muted);">לא הוזן מייל</span>'}</td>
+          <td>${k.takenTime || "-"} (${k.takenDate || ""})</td>
+          <td><span class="pill pill-out">${userDeadline}</span></td>
+          <td>
+            <button class="btn btn-warning btn-sm" onclick="sendWorkerReminder('${k.name}', '${holder}', '${matchedEmail}', '${userDeadline}')">
+              שלח תזכורת לעובד
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function parseLogDateISO(dateStr) {
+      if (!dateStr || !dateStr.includes("/")) return "";
+      const parts = dateStr.split("/");
+      if (parts.length !== 3) return "";
+      return `${parts[2]}-${parts[1].padStart(2, "0")}-${parts[0].padStart(2, "0")}`;
+    }
+
+    window.renderLogs = () => {
+      const filterType = document.getElementById("log-filter-type").value;
+      const fromDate = document.getElementById("log-filter-from").value;
+      const toDate = document.getElementById("log-filter-to").value;
+      const tbody = document.getElementById("logs-tbody");
+      tbody.innerHTML = "";
+      filteredLogsCache = [];
+
+      if (filterType === "unreturned") {
+        const keysObj = currentCabData.keys || {};
+        Object.entries(keysObj).forEach(([kId, k]) => {
+          const isOut = k.status !== "in" && k.isPresent !== true;
+          if (!isOut) return;
+          const iso = parseLogDateISO(k.takenDate || "");
+          if (fromDate && iso && iso < fromDate) return;
+          if (toDate && iso && iso > toDate) return;
+
+          const row = {
+            date: k.takenDate || "-",
+            time: k.takenTime || "-",
+            actionLabel: "טרם הוחזר (בחוץ)",
+            keyName: k.name || kId,
+            slot: "-",
+            userName: k.holderName || "לא ידוע",
+            userId: "-"
+          };
+          filteredLogsCache.push(row);
+        });
+      } else {
+        const logsObj = currentCabData.logs || {};
+        const entries = Object.values(logsObj).sort((a, b) => (b.epoch || 0) - (a.epoch || 0));
+        entries.forEach((l) => {
+          if (filterType === "take" && l.action !== "take") return;
+          if (filterType === "return" && l.action !== "return") return;
+
+          const dStr = l.date || (l.timestamp ? l.timestamp.split(" ")[0] : "-");
+          const tStr = l.time || (l.timestamp ? l.timestamp.split(" ")[1] : "-");
+          const iso = parseLogDateISO(dStr);
+          if (fromDate && iso && iso < fromDate) return;
+          if (toDate && iso && iso > toDate) return;
+
+          filteredLogsCache.push({
+            date: dStr,
+            time: tStr,
+            actionLabel: l.action === "take" ? "לקיחת מפתח" : "החזרת מפתח",
+            isTake: l.action === "take",
+            keyName: l.keyName || "-",
+            slot: l.slot || "-",
+            userName: l.userName || "-",
+            userId: l.userId || "-"
+          });
+        });
+      }
+
+      filteredLogsCache.forEach((r) => {
+        const tr = document.createElement("tr");
+        const pillClass = r.actionLabel.includes("הוחזר") ? "pill-out" : (r.isTake ? "pill-out" : "pill-in");
+        tr.innerHTML = `
+          <td>${r.date}</td>
+          <td>${r.time}</td>
+          <td><span class="pill ${pillClass}">${r.actionLabel}</span></td>
+          <td><strong>${r.keyName}</strong></td>
+          <td>${r.slot}</td>
+          <td>${r.userName}</td>
+          <td>${r.userId}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    };
+
+    window.resetLogFilters = () => {
+      document.getElementById("log-filter-type").value = "all";
+      document.getElementById("log-filter-from").value = "";
+      document.getElementById("log-filter-to").value = "";
+      renderLogs();
+    };
+
+    window.exportFilteredLogsCSV = () => {
+      let csv = "\uFEFFתאריך,שעה,סוג פעולה,שם המפתח,תא,עובד / אורח,תעודת זהות\n";
+      filteredLogsCache.forEach((r) => {
+        csv += `"${r.date}","${r.time}","${r.actionLabel}","${r.keyName}","${r.slot}","${r.userName}","${r.userId}"\n`;
+      });
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `SKC_Report_${currentCabId}_${new Date().toISOString().slice(0,10)}.csv`;
+      link.click();
+    };
+
+    window.printFilteredLogs = () => {
+      const cabName = (orgCabinets[currentCabId] && orgCabinets[currentCabId].name) || currentCabId;
+      const filterText = document.getElementById("log-filter-type").selectedOptions[0].text;
+      document.getElementById("print-meta").textContent = `ארון: ${cabName} (${currentCabId}) | סינון: ${filterText} | הופק בתאריך: ${new Date().toLocaleString("he-IL")}`;
+      window.print();
+    };
 
     // Actions
-    function registerDetectedKey() {
-      if (!detectedUnregistered || !currentCabId) return;
-      const name = document.getElementById('nk-name').value.trim();
-      if (!name) return alert('אנא הזן שם למפתח');
-      const kid = detectedUnregistered.id;
-      const slot = detectedUnregistered.slot || 1;
-      db.ref(`cabinets/${currentCabId}/keys/${kid}`).set({
+    window.remoteUnlockDoor = async () => {
+      if (!currentCabId) return;
+      const guest = document.getElementById("guest-name-input").value.trim();
+      await update(ref(db, `cabinets/${currentCabId}`), {
+        remoteUnlock: true,
+        guestName: guest
+      });
+      const fb = document.getElementById("unlock-feedback");
+      fb.textContent = guest ? `פקודת פתיחה נשלחה עבור האורח: ${guest}` : "פקודת פתיחת דלת נשלחה!";
+      document.getElementById("guest-name-input").value = "";
+      setTimeout(() => fb.textContent = "", 5000);
+    };
+
+    window.registerNewKey = async () => {
+      const unreg = currentCabData.unregisteredKey;
+      const name = document.getElementById("unreg-name-input").value.trim();
+      if (!unreg || !unreg.romId) return;
+      if (!name) return alert("אנא הזן שם למפתח");
+
+      await set(ref(db, `cabinets/${currentCabId}/keys/${unreg.romId}`), {
+        romId: unreg.romId,
         name: name,
-        slot: slot,
-        access: 'all',
-        allowedUsers: []
-      }).then(() => {
-        db.ref(`cabinets/${currentCabId}/unregisteredKey`).remove();
-        document.getElementById('nk-name').value = '';
+        slot: unreg.slot || 1,
+        status: "in",
+        accessMode: "all",
+        allowedUsers: ""
       });
-    }
+      await remove(ref(db, `cabinets/${currentCabId}/unregisteredKey`));
+      document.getElementById("unreg-name-input").value = "";
+    };
 
-    function dismissDetectedKey() {
-      if (!currentCabId) return;
-      db.ref(`cabinets/${currentCabId}/unregisteredKey`).remove();
-    }
+    window.dismissUnregisteredKey = async () => {
+      await remove(ref(db, `cabinets/${currentCabId}/unregisteredKey`));
+    };
 
-    function openManualKeyModal() {
-      const kid = prompt('הזן מזהה שבב (16 תווים HEX):');
-      if (!kid) return;
-      const name = prompt('הזן שם למפתח:');
-      if (!name) return;
-      db.ref(`cabinets/${currentCabId}/keys/${kid.trim().toUpperCase()}`).set({
-        name: name.trim(),
-        slot: 0,
-        access: 'all',
-        allowedUsers: []
-      });
-    }
-
-    function deleteKey(kid) {
-      if (confirm('למחוק מפתח זה מהמערכת?')) {
-        db.ref(`cabinets/${currentCabId}/keys/${kid}`).remove();
+    window.deleteKey = async (kId) => {
+      if (confirm("למחוק מפתח זה מהארון?")) {
+        await remove(ref(db, `cabinets/${currentCabId}/keys/${kId}`));
       }
-    }
+    };
 
-    function saveUser() {
-      if (!currentCabId) return;
-      const uid = document.getElementById('u-id').value.trim();
-      const name = document.getElementById('u-name').value.trim();
-      const phone = document.getElementById('u-phone').value.trim();
-      const email = document.getElementById('u-email').value.trim();
-      const role = document.getElementById('u-role').value;
-      if (!uid || !name) return alert('חובה להזין תעודת זהות ושם מלא');
-      db.ref(`cabinets/${currentCabId}/users/${uid}`).set({ name, phone, email, role }).then(() => {
-        document.getElementById('u-id').value = '';
-        document.getElementById('u-name').value = '';
-        document.getElementById('u-phone').value = '';
-        document.getElementById('u-email').value = '';
+    window.openEditKeyModal = (kId) => {
+      const k = (currentCabData.keys || {})[kId];
+      if (!k) return;
+      document.getElementById("edit-key-id").value = kId;
+      document.getElementById("edit-key-name").value = k.name || "";
+      document.getElementById("edit-key-mode").value = k.accessMode || "all";
+
+      const listDiv = document.getElementById("specific-users-list");
+      listDiv.innerHTML = "";
+      const allowedArr = (k.allowedUsers || "").split(",");
+      Object.entries(currentCabData.users || {}).forEach(([uId, u]) => {
+        const checked = allowedArr.includes(u.id || uId) ? "checked" : "";
+        listDiv.innerHTML += `<label><input type="checkbox" value="${u.id || uId}" ${checked}/> ${u.name} (${u.id || uId})</label>`;
       });
-    }
+      toggleSpecificUsersList();
+      document.getElementById("modal-edit-key").classList.remove("hidden");
+    };
 
-    function deleteUser(uid) {
-      if (confirm('להסיר עובד זה מרשימת המורשים?')) {
-        db.ref(`cabinets/${currentCabId}/users/${uid}`).remove();
+    window.toggleSpecificUsersList = () => {
+      const mode = document.getElementById("edit-key-mode").value;
+      document.getElementById("specific-users-box").classList.toggle("hidden", mode !== "specific");
+    };
+
+    window.saveKeyEdit = async () => {
+      const kId = document.getElementById("edit-key-id").value;
+      const name = document.getElementById("edit-key-name").value.trim();
+      const mode = document.getElementById("edit-key-mode").value;
+      const checked = Array.from(document.querySelectorAll("#specific-users-list input:checked")).map(cb => cb.value);
+
+      await update(ref(db, `cabinets/${currentCabId}/keys/${kId}`), {
+        name: name,
+        accessMode: mode,
+        allowedUsers: checked.join(",")
+      });
+      closeModal("modal-edit-key");
+    };
+
+    // Users CRUD & CSV
+    window.openUserModal = (uId = "") => {
+      const u = uId ? (currentCabData.users || {})[uId] : null;
+      document.getElementById("user-modal-title").textContent = u ? "עריכת פרטי עובד" : "הוספת עובד חדש";
+      document.getElementById("u-id").value = u ? (u.id || uId) : "";
+      document.getElementById("u-id").disabled = !!u;
+      document.getElementById("u-name").value = u ? u.name : "";
+      document.getElementById("u-phone").value = u ? (u.phone || "") : "";
+      document.getElementById("u-email").value = u ? (u.email || "") : "";
+      document.getElementById("u-role").value = u ? (u.role || "user") : "user";
+      document.getElementById("modal-user").classList.remove("hidden");
+    };
+
+    window.saveUser = async () => {
+      const id = document.getElementById("u-id").value.trim();
+      const name = document.getElementById("u-name").value.trim();
+      const phone = document.getElementById("u-phone").value.trim();
+      const email = document.getElementById("u-email").value.trim();
+      const role = document.getElementById("u-role").value;
+      if (!id || !name) return alert("חובה להזין ת.ז. ושם מלא");
+
+      await set(ref(db, `cabinets/${currentCabId}/users/${id}`), { id, name, phone, email, role });
+      closeModal("modal-user");
+    };
+
+    window.deleteUser = async (uId) => {
+      if (confirm("למחוק עובד זה?")) {
+        await remove(ref(db, `cabinets/${currentCabId}/users/${uId}`));
       }
-    }
+    };
 
-    function handleCSVUpload(event) {
+    window.importUsersCSV = (event) => {
       const file = event.target.files[0];
-      if (!file || !currentCabId) return;
+      if (!file) return;
       const reader = new FileReader();
-      reader.onload = function(e) {
+      reader.onload = async (e) => {
         const lines = e.target.result.split(/\r?\n/);
-        const updates = {};
         let count = 0;
-        lines.forEach((line, idx) => {
-          if (!line.trim()) return;
-          const cols = line.split(',').map(c => c.trim().replace(/^"|"$/g, ''));
-          if (idx === 0 && (cols[0].includes('ת.ז') || cols[0].toLowerCase().includes('id'))) return;
-          const uid = cols[0];
-          const name = cols[1];
-          if (uid && name) {
-            updates[uid] = {
-              name: name,
-              phone: cols[2] || '',
-              email: cols[3] || '',
-              role: (cols[4] && cols[4].toLowerCase() === 'admin') ? 'admin' : 'user'
-            };
+        for (let i = 0; i < lines.length; i++) {
+          const cols = lines[i].split(",").map(c => c.replace(/^"|"$/g, "").trim());
+          if (cols.length >= 2 && /^\d{5,10}$/.test(cols[0])) {
+            const [id, name, phone = "", email = "", roleRaw = "user"] = cols;
+            const role = roleRaw.toLowerCase().includes("admin") ? "admin" : "user";
+            await set(ref(db, `cabinets/${currentCabId}/users/${id}`), { id, name, phone, email, role });
             count++;
           }
-        });
-        if (count > 0) {
-          db.ref(`cabinets/${currentCabId}/users`).update(updates).then(() => {
-            alert(`יובאו בהצלחה ${count} עובדים!`);
-          });
-        } else {
-          alert('לא נמצאו שורות תקינות בקובץ.');
         }
+        alert(`יובאו בהצלחה ${count} עובדים!`);
+        event.target.value = "";
       };
-      reader.readAsText(file, 'UTF-8');
-    }
+      reader.readAsText(file, "UTF-8");
+    };
 
-    function remoteUnlock() {
-      if (!currentCabId) return;
-      db.ref(`cabinets/${currentCabId}/remoteUnlock`).set(true).then(() => {
-        alert('פקודת פתיחת דלת נשלחה לארון!');
+    // Cabinets Management
+    window.openAddCabinetModal = () => document.getElementById("modal-add-cab").classList.remove("hidden");
+
+    window.confirmAddCabinet = async () => {
+      const cabId = document.getElementById("new-cab-id").value.trim().toUpperCase();
+      const cabName = document.getElementById("new-cab-name").value.trim() || cabId;
+      if (!cabId) return alert("הזן קוד ארון");
+
+      await set(ref(db, `organizations/${currentUser.uid}/cabinets/${cabId}`), { name: cabName });
+      await update(ref(db, `cabinets/${cabId}`), { orgId: currentUser.uid, name: cabName });
+      closeModal("modal-add-cab");
+      document.getElementById("new-cab-id").value = "";
+      document.getElementById("new-cab-name").value = "";
+    };
+
+    window.saveCabinetSettings = async () => {
+      const newName = document.getElementById("set-cab-name").value.trim();
+      if (!newName || !currentCabId) return;
+      await update(ref(db, `organizations/${currentUser.uid}/cabinets/${currentCabId}`), { name: newName });
+      await update(ref(db, `cabinets/${currentCabId}`), { name: newName });
+      alert("שם הארון עודכן!");
+    };
+
+    window.deleteCurrentCabinet = async () => {
+      const pwd = prompt("הזן סיסמת מנהל-על למחיקת הארון:");
+      if (pwd !== "260398") return alert("סיסמת מנהל-על שגויה!");
+      if (!confirm(`האם אתה בטוח שברצונך למחוק לצמיתות את הארון ${currentCabId}?`)) return;
+
+      await remove(ref(db, `organizations/${currentUser.uid}/cabinets/${currentCabId}`));
+      await update(ref(db, `cabinets/${currentCabId}`), { orgId: null });
+      alert("הארון הוסר מהמערכת.");
+    };
+
+    // Alerts & Email Sending
+    window.saveAlertSettings = async () => {
+      const userDeadline = document.getElementById("alert-user-time").value;
+      const adminDeadline = document.getElementById("alert-admin-time").value;
+      const extraAdminEmail = document.getElementById("alert-extra-admin-email").value.trim();
+      await update(ref(db, `cabinets/${currentCabId}/alertSettings`), {
+        userDeadline, adminDeadline, extraAdminEmail
       });
-    }
+      alert("הגדרות שעות ההתראה נשמרו!");
+    };
 
-    function saveCabinetSettings() {
-      if (!currentCabId) return;
-      const name = document.getElementById('set-cab-name').value.trim();
-      const pin = document.getElementById('set-tech-pin').value.trim() || '9999';
-      db.ref(`cabinets/${currentCabId}`).update({ cabinetName: name, techPin: pin });
-      db.ref(`organizations/${currentUser.uid}/cabinets/${currentCabId}/name`).set(name);
-      alert('הגדרות הארון נשמרו בהצלחה');
-    }
-
-    function openAddCabinetModal() { document.getElementById('add-cab-modal').classList.remove('hidden'); }
-    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-
-    function addCabinet() {
-      const rawId = document.getElementById('new-cab-id').value.trim().toUpperCase();
-      const name = document.getElementById('new-cab-name').value.trim() || rawId;
-      if (!rawId) return alert('הזן קוד ארון');
-      db.ref(`organizations/${currentUser.uid}/cabinets/${rawId}`).set({ name });
-      db.ref(`cabinets/${rawId}`).update({ orgId: currentUser.uid, cabinetName: name });
-      document.getElementById('new-cab-id').value = '';
-      document.getElementById('new-cab-name').value = '';
-      closeModal('add-cab-modal');
-    }
-
-    function deleteCurrentCabinet() {
-      if (!currentCabId) return;
-      const code = prompt('הזן סיסמת מנהל-על לאישור מחיקת הארון:');
-      if (code !== '260398') return alert('סיסמת מנהל-על שגויה! הפעולה בוטלה.');
-      const target = currentCabId;
-      db.ref(`organizations/${currentUser.uid}/cabinets/${target}`).remove();
-      db.ref(`cabinets/${target}/orgId`).remove();
-      alert(`הארון ${target} הוסר מהמערכת.`);
-    }
-
-    // Permissions Modal
-    function openPermModal(kid) {
-      const k = (cabData.keys || {})[kid];
-      if (!k) return;
-      document.getElementById('pm-key-id').value = kid;
-      document.getElementById('pm-key-name').innerText = k.name || kid;
-      document.getElementById('pm-edit-name').value = k.name || '';
-      const mode = k.access || 'all';
-      document.getElementById('pm-access-mode').value = mode;
-      toggleSpecificUsers(mode);
-
-      const listDiv = document.getElementById('pm-users-list');
-      listDiv.innerHTML = '';
-      const users = cabData.users || {};
-      const allowed = k.allowedUsers || [];
-      Object.keys(users).forEach(uid => {
-        const checked = allowed.includes(uid) ? 'checked' : '';
-        listDiv.innerHTML += `
-          <label class="perm-item">
-            <input type="checkbox" class="pm-user-chk" value="${uid}" ${checked}>
-            <span>${users[uid].name} (${uid})</span>
-          </label>
-        `;
+    window.saveEmailJsSettings = async () => {
+      const ejsPublicKey = document.getElementById("ejs-public-key").value.trim();
+      const ejsServiceId = document.getElementById("ejs-service-id").value.trim();
+      const ejsTemplateId = document.getElementById("ejs-template-id").value.trim();
+      await update(ref(db, `cabinets/${currentCabId}/alertSettings`), {
+        ejsPublicKey, ejsServiceId, ejsTemplateId
       });
-      document.getElementById('perm-modal').classList.remove('hidden');
-    }
+      alert("פרטי החיבור ל-EmailJS נשמרו!");
+    };
 
-    function toggleSpecificUsers(val) {
-      document.getElementById('pm-users-box').classList.toggle('hidden', val !== 'specific');
-    }
-
-    function saveKeyPermissions() {
-      const kid = document.getElementById('pm-key-id').value;
-      const name = document.getElementById('pm-edit-name').value.trim();
-      const access = document.getElementById('pm-access-mode').value;
-      const allowedUsers = [];
-      if (access === 'specific') {
-        document.querySelectorAll('.pm-user-chk:checked').forEach(chk => allowedUsers.push(chk.value));
+    async function dispatchEmail(toEmail, toName, subject, message) {
+      const aSet = currentCabData.alertSettings || {};
+      if (aSet.ejsPublicKey && aSet.ejsServiceId && aSet.ejsTemplateId && window.emailjs) {
+        try {
+          emailjs.init(aSet.ejsPublicKey);
+          await emailjs.send(aSet.ejsServiceId, aSet.ejsTemplateId, {
+            to_email: toEmail,
+            to_name: toName,
+            subject: subject,
+            message: message
+          });
+          alert(`המייל נשלח אוטומטית בהצלחה אל ${toEmail}!`);
+          return;
+        } catch (err) {
+          console.error("EmailJS Error:", err);
+          alert("שגיאה בשליחה אוטומטית דרך EmailJS, פותח חלון מייל חלופי...");
+        }
       }
-      db.ref(`cabinets/${currentCabId}/keys/${kid}`).update({ name, access, allowedUsers }).then(() => {
-        closeModal('perm-modal');
-      });
+      const mailto = `mailto:${encodeURIComponent(toEmail)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+      window.open(mailto, "_blank");
     }
 
-    function exportLogsCSV() {
-      const logs = cabData.logs || {};
-      let csv = "\uFEFFתאריך ושעה,פעולה,מפתח,תא,עובד\n";
-      Object.keys(logs).reverse().forEach(k => {
-        const l = logs[k];
-        csv += `"${l.time || ''}","${l.action || ''}","${l.keyName || l.keyId || ''}","${l.slot || ''}","${l.userName || l.userId || ''}"\n`;
-      });
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `SKC_Logs_${currentCabId}.csv`;
-      a.click();
-    }
+    window.sendWorkerReminder = (keyName, holderName, email, deadline) => {
+      const targetEmail = email || prompt(`לא נמצא מייל לעובד (${holderName}). הזן כתובת מייל לשליחה:`);
+      if (!targetEmail) return;
+      const cabName = (orgCabinets[currentCabId] && orgCabinets[currentCabId].name) || currentCabId;
+      const subject = `תזכורת להחזרת מפתח: ${keyName} (${cabName})`;
+      const message = `שלום ${holderName},\n\nהמפתח "${keyName}" שנלקח מארון המפתחות "${cabName}" טרם הוחזר לארון (שעת היעד להחזרה הייתה ${deadline}).\nנא להחזיר את המפתח לארון בהקדם.\n\nבברכה,\nמערכת ניהול מפתחות SKC`;
+      dispatchEmail(targetEmail, holderName, subject, message);
+    };
 
-    function switchTab(tabName, btn) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-      document.getElementById('tab-' + tabName).classList.remove('hidden');
-      btn.classList.add('active');
-    }
+    window.sendAdminSummaryAlert = () => {
+      const aSet = currentCabData.alertSettings || {};
+      const usersObj = currentCabData.users || {};
+      const adminEmails = [];
+      Object.values(usersObj).forEach(u => {
+        if (u.role === "admin" && u.email) adminEmails.push(u.email);
+      });
+      if (aSet.extraAdminEmail) adminEmails.push(aSet.extraAdminEmail);
+
+      const uniqueEmails = [...new Set(adminEmails)];
+      const toStr = uniqueEmails.length > 0 ? uniqueEmails.join(",") : prompt("לא הוגדרו מיילים למנהלי מערכת. הזן כתובת מייל של מנהל:");
+      if (!toStr) return;
+
+      const keysObj = currentCabData.keys || {};
+      const outKeys = Object.values(keysObj).filter(k => k.status !== "in" && k.isPresent !== true);
+      if (outKeys.length === 0) return alert("אין כרגע מפתחות מחוץ לארון!");
+
+      const cabName = (orgCabinets[currentCabId] && orgCabinets[currentCabId].name) || currentCabId;
+      const lines = outKeys.map(k => `- ${k.name} | מחזיק: ${k.holderName || "לא ידוע"} | נלקח בשעה: ${k.takenTime || "-"}`).join("\n");
+      const subject = `דוח חריגים: מפתחות שטרם הוחזרו לארון ${cabName}`;
+      const message = `שלום למנהלי המערכת,\n\nלהלן רשימת המפתחות שטרם הוחזרו לארון "${cabName}" (נכון לשעה ${new Date().toLocaleTimeString("he-IL")}):\n\n${lines}\n\nבברכה,\nמערכת ניהול מפתחות SKC`;
+      dispatchEmail(toStr, "מנהלי מערכת", subject, message);
+    };
+
+    // Tabs & Modals
+    window.switchTab = (tabName) => {
+      ["keys", "users", "settings", "alerts", "logs"].forEach(t => {
+        document.getElementById(`tab-${t}`).classList.toggle("hidden", t !== tabName);
+        document.getElementById(`tab-btn-${t}`).classList.toggle("active", t === tabName);
+      });
+    };
+
+    window.closeModal = (id) => document.getElementById(id).classList.add("hidden");
   </script>
 </body>
 </html>
