@@ -25,7 +25,7 @@ button { cursor: pointer; background: var(--primary-light); color: #fff; border:
 button:hover { opacity: 0.9; }
 button.btn-success { background: var(--success); }
 button.btn-danger { background: var(--danger); }
-button.btn-warning { background: var(--warning); }
+button.btn-warning { background: var(--warning); } #guestUnlockButton:disabled { background:#9ca3af !important; color:#fff; cursor:not-allowed; opacity:1; }
 button.btn-secondary { background: #475569; }
 button.btn-manufacturer { background: #7c3aed; }
 .container { max-width: 1200px; margin: 20px auto; padding: 0 16px; }
@@ -113,7 +113,7 @@ body { background: #fff; }
 </div>
 </div>
 <div class="form-row no-print" style="margin-top:0; background:#f8fafc; padding:10px; border-radius:8px; border:1px solid var(--border);">
-<input type="text" id="guestNameInput" placeholder="שם אורח / מבקר (לפחות 3 תווים)" style="min-width:210px;" oninput="updateGuestUnlockButton()" />
+<input type="text" id="guestNameInput" placeholder="שם אורח / מבקר (לפחות 3 תווים)" style="width:360px; max-width:100%; box-sizing:border-box;" oninput="updateGuestUnlockButton()" />
 <button id="guestUnlockButton" onclick="triggerRemoteUnlock()" class="btn-warning" disabled>🔓 פתח דלת ומסור לאורח</button>
 </div>
 </div>
