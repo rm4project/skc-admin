@@ -113,8 +113,8 @@ body { background: #fff; }
 </div>
 </div>
 <div class="form-row no-print" style="margin-top:0; background:#f8fafc; padding:10px; border-radius:8px; border:1px solid var(--border);">
-<input type="text" id="guestNameInput" placeholder="שם אורח / מבקר (אופציונלי)" style="min-width:210px;" />
-<button onclick="triggerRemoteUnlock()" class="btn-warning">🔓 פתח דלת ומסור לאורח</button>
+<input type="text" id="guestNameInput" placeholder="שם אורח / מבקר (לפחות 3 תווים)" style="min-width:210px;" oninput="updateGuestUnlockButton()" />
+<button id="guestUnlockButton" onclick="triggerRemoteUnlock()" class="btn-warning" disabled>🔓 פתח דלת ומסור לאורח</button>
 </div>
 </div>
 </div>
@@ -423,12 +423,24 @@ document.querySelectorAll(".nav-tab").forEach(el => el.classList.remove("active"
 document.getElementById(tabId).classList.remove("hidden");
 document.querySelector(`.nav-tab[data-tab="${tabId}"]`).classList.add("active");
 }
+function updateGuestUnlockButton() {
+const guestInput = document.getElementById("guestNameInput");
+const unlockButton = document.getElementById("guestUnlockButton");
+if (!guestInput || !unlockButton) return;
+unlockButton.disabled = guestInput.value.trim().length < 3;
+}
 async function triggerRemoteUnlock() {
 if (activeCabinetData && activeCabinetData.suspended) return alert("הארון מוקפא על ידי ספק השירות.");
-const guestName = document.getElementById("guestNameInput").value.trim();
+const guestInput = document.getElementById("guestNameInput");
+const guestName = guestInput.value.trim();
+if (guestName.length < 3) {
+updateGuestUnlockButton();
+return alert("יש להזין שם אורח באורך של 3 תווים לפחות.");
+}
 await db.ref("cabinets/" + activeCabinetId).update({ remoteUnlock: true, guestName: guestName });
-document.getElementById("guestNameInput").value = "";
-alert(guestName ? ("פקודת פתיחה נשלחה עבור האורח: " + guestName) : "פקודת פתיחת דלת נשלחה לארון!");
+guestInput.value = "";
+updateGuestUnlockButton();
+alert("פקודת פתיחה נשלחה עבור האורח: " + guestName);
 }
 async function registerDetectedKey() {
 const unreg = activeCabinetData.unregisteredKey;
