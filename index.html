@@ -172,11 +172,6 @@ body { background: #fff; }
 </thead>
 <tbody id="usersTableBody"></tbody>
 </table>
-<h3 style="margin-top:24px;">היסטוריית שיוך והחלפת תגי RFID</h3>
-<table>
-<thead><tr><th>תאריך ושעה</th><th>פעולה</th><th>עובד</th><th>תג קודם / תג</th><th>תג חדש</th><th>מנהל מבצע</th></tr></thead>
-<tbody id="rfidHistoryTableBody"></tbody>
-</table>
 </div>
 <div id="settingsTab" class="tab-content card hidden">
 <h3 style="margin-top:0;">הגדרות ארון וחשבון</h3>
@@ -185,6 +180,21 @@ body { background: #fff; }
 <div class="form-group"><label>קוד זיהוי חומרה (קבוע)</label><input type="text" id="readonlyCabId" disabled /></div>
 </div>
 <div style="margin-top:16px;"><button onclick="saveCabinetSettings()" class="btn-success">שמור הגדרות ארון</button></div>
+<hr style="margin:24px 0; border:none; border-top:1px solid var(--border);" />
+<section id="rfidManagementSection">
+  <h3 style="margin:0 0 8px 0;">ניהול תגי RFID</h3>
+  <p style="margin:0 0 16px 0;color:var(--muted);font-size:.9rem;">ניהול מרוכז של תגי העובדים. באתר מוצגות שש הספרות האחרונות בלבד; מזהה התג המלא נשמר ב-Firebase לצורך זיהוי.</p>
+  <h4 style="margin:0 0 10px 0;">תגים משויכים</h4>
+  <table>
+    <thead><tr><th>מזהה תג (6 ספרות אחרונות)</th><th>עובד משויך</th><th>סטטוס</th><th>תאריך שיוך</th></tr></thead>
+    <tbody id="rfidCardsTableBody"></tbody>
+  </table>
+  <h4 style="margin:24px 0 10px 0;">היסטוריית שיוך והחלפת תגי RFID</h4>
+  <table>
+    <thead><tr><th>תאריך ושעה</th><th>פעולה</th><th>עובד</th><th>תג קודם</th><th>תג חדש</th><th>מנהל מבצע</th></tr></thead>
+    <tbody id="rfidHistoryTableBody"></tbody>
+  </table>
+</section>
 <hr style="margin:24px 0; border:none; border-top:1px solid var(--border);" />
 <div style="background:#f8fafc; border:1px solid var(--border); padding:16px; border-radius:8px;">
 <h4 style="margin:0 0 8px 0; color:var(--primary);">🔐 שינוי סיסמת כניסה לאתר</h4>
@@ -487,6 +497,31 @@ async function createUserAndAssignPendingRfid() {
   activeCabinetData.users[id] = { id, name, email:"", role };
   await assignRfidToUser(currentPendingRfidUid, id);
 }
+function renderRfidCardsTable() {
+  const tbody = document.getElementById("rfidCardsTableBody");
+  if (!tbody) return;
+  const cards = getRfidCards();
+  const users = (activeCabinetData && activeCabinetData.users) || {};
+  const ids = Object.keys(cards).sort((a,b) => {
+    const aa = cards[a] || {}, bb = cards[b] || {};
+    return String(bb.assignedAt || "").localeCompare(String(aa.assignedAt || ""));
+  });
+  tbody.innerHTML = "";
+  if (!ids.length) {
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--muted);">עדיין לא שויכו תגי RFID.</td></tr>`;
+    return;
+  }
+  ids.forEach(uid => {
+    const card = cards[uid] || {};
+    const user = users[card.userId] || {};
+    const tr = document.createElement("tr");
+    const status = card.active ? `<span class="status-pill status-online">פעיל</span>` : `<span class="status-pill">מבוטל</span>`;
+    const assignedAt = card.assignedAt ? new Date(card.assignedAt).toLocaleString("he-IL") : "-";
+    tr.innerHTML = `<td dir="ltr">${getRfidSuffix(uid)}</td><td>${user.name || card.userName || card.userId || "לא משויך"}</td><td>${status}</td><td>${assignedAt}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
 function renderRfidHistoryTable() {
   const tbody = document.getElementById("rfidHistoryTableBody");
   if (!tbody) return;
@@ -531,7 +566,7 @@ const ejs = activeCabinetData.emailJsConfig || {};
 if (ejs.publicKey) document.getElementById("ejsPublicKey").value = ejs.publicKey;
 if (ejs.serviceId) document.getElementById("ejsServiceId").value = ejs.serviceId;
 if (ejs.templateId) document.getElementById("ejsTemplateId").value = ejs.templateId;
-renderKeysTable(); renderUsersTable(); renderRfidHistoryTable(); renderAlertsTable(); renderLogsTable(); showPendingRfidIfNeeded();
+renderKeysTable(); renderUsersTable(); renderRfidCardsTable(); renderRfidHistoryTable(); renderAlertsTable(); renderLogsTable(); showPendingRfidIfNeeded();
 }
 function switchTab(tabId) {
 document.querySelectorAll(".tab-content").forEach(el => el.classList.add("hidden"));
