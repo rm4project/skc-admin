@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#10243a">
+<title>SKC | פורטל היצרן</title>
+<style>
+:root{--navy:#10243a;--navy2:#183550;--blue:#2878bd;--cyan:#eaf4fb;--bg:#f3f6fa;--surface:#fff;--text:#172638;--muted:#718096;--line:#e4eaf0;--green:#16845b;--amber:#b7791f;--red:#c04444;--shadow:0 8px 28px rgba(20,43,67,.06)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,"Segoe UI",sans-serif}button,input{font:inherit}.layout{min-height:100vh;display:grid;grid-template-columns:250px 1fr}.sidebar{background:var(--navy);color:#fff;padding:25px 16px;display:flex;flex-direction:column;gap:28px}.brand{display:flex;align-items:center;gap:12px;padding:0 10px}.brand-mark{width:42px;height:42px;border-radius:13px;background:#fff;color:var(--navy);display:grid;place-items:center;font-size:22px;font-weight:800}.brand-name{font-size:19px;font-weight:800;letter-spacing:.4px}.brand-sub{font-size:11px;color:#b9c9d8;margin-top:4px}.nav-label{font-size:10px;color:#91a7bb;padding:0 13px;margin:0 0 8px;letter-spacing:1px}.nav{display:grid;gap:5px}.nav button{border:0;background:transparent;color:#d6e1eb;text-align:right;padding:12px 13px;border-radius:9px;cursor:pointer;display:flex;align-items:center;gap:12px;font-size:14px}.nav button:hover,.nav button.active{background:#23445f;color:#fff}.nav .ico{width:20px;text-align:center;font-size:17px}.side-bottom{margin-top:auto;border-top:1px solid #2b465e;padding:17px 10px 0;color:#a9bdce;font-size:12px;line-height:1.7}.main{min-width:0}.topbar{height:76px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 34px}.crumb{color:var(--muted);font-size:13px}.top-actions{display:flex;align-items:center;gap:16px}.env{border:1px solid #f1d7a8;background:#fff8e9;color:#98651c;border-radius:20px;padding:6px 11px;font-size:11px;font-weight:700}.avatar{width:36px;height:36px;border-radius:50%;background:#e7f0f8;color:#24577e;display:grid;place-items:center;font-weight:700}.content{max-width:1450px;margin:auto;padding:34px}.heading{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:26px}.eyebrow{color:var(--blue);font-size:12px;font-weight:700;margin-bottom:9px}.heading h1{font-size:27px;margin:0 0 8px;letter-spacing:-.5px}.sub{color:var(--muted);font-size:14px}.btn{border:0;border-radius:9px;background:var(--navy2);color:#fff;padding:11px 16px;font-weight:700;cursor:pointer}.btn:hover{background:#245273}.btn.secondary{background:#fff;color:var(--navy2);border:1px solid var(--line)}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:22px}.stat,.panel{background:var(--surface);border:1px solid var(--line);border-radius:13px;box-shadow:var(--shadow)}.stat{padding:19px}.stat-top{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:13px}.stat-icon{width:35px;height:35px;border-radius:10px;background:var(--cyan);color:var(--blue);display:grid;place-items:center;font-size:17px}.stat-value{font-size:29px;font-weight:800;margin:14px 0 5px}.stat-note{font-size:11px;color:var(--muted)}.panel{padding:22px;margin-bottom:18px}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:17px}.panel h2{font-size:16px;margin:0}.panel-note{font-size:12px;color:var(--muted)}.quick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.quick button{background:#fff;border:1px solid var(--line);border-radius:11px;text-align:right;padding:16px;cursor:pointer;color:var(--text)}.quick button:hover{border-color:#9dc4e3;background:#f8fbfe}.quick-icon{font-size:20px;color:var(--blue);margin-bottom:10px}.quick strong{display:block;font-size:13px;margin-bottom:5px}.quick span{font-size:11px;color:var(--muted)}.notice{background:#f8fbfe;border:1px dashed #c9d9e7;border-radius:11px;padding:20px;display:flex;align-items:flex-start;gap:12px;color:#50677c;font-size:13px;line-height:1.7}.notice b{color:#284b68}.page{display:none}.page.active{display:block}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:550px}th,td{padding:13px 10px;border-bottom:1px solid var(--line);text-align:right;font-size:13px}th{color:var(--muted);font-weight:600;background:#fbfcfd}.empty{text-align:center;color:var(--muted);padding:35px 12px}.search{border:1px solid var(--line);border-radius:8px;padding:9px 12px;min-width:210px;background:#fff}.footer-note{font-size:11px;color:#8795a4;text-align:center;padding:14px}
+@media(max-width:1050px){.layout{grid-template-columns:210px 1fr}.stats{grid-template-columns:repeat(2,1fr)}.quick{grid-template-columns:repeat(2,1fr)}.content{padding:25px}}
+@media(max-width:720px){.layout{display:block}.sidebar{padding:13px;gap:13px}.brand{padding:0 5px}.nav-label,.side-bottom{display:none}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap;padding:9px 11px}.topbar{height:58px;padding:0 16px}.content{padding:20px 14px}.heading{display:block}.heading .btn{margin-top:16px}.stats{gap:10px}.stat{padding:14px}.stat-value{font-size:24px}.quick{gap:9px}.quick button{padding:13px}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="brand"><div class="brand-mark">S</div><div><div class="brand-name">SKC</div><div class="brand-sub">פורטל ניהול יצרן</div></div></div>
+  <div><div class="nav-label">תפריט ראשי</div><nav class="nav" aria-label="ניווט ראשי">
+    <button class="active" data-page="dashboard"><span class="ico">▦</span>לוח בקרה</button>
+    <button data-page="cabinets"><span class="ico">▣</span>ניהול ארונות</button>
+    <button data-page="organizations"><span class="ico">▤</span>ארגונים ולקוחות</button>
+    <button data-page="technicians"><span class="ico">♙</span>ניהול טכנאים</button>
+    <button data-page="incidents"><span class="ico">⚒</span>תקלות ותחזוקה</button>
+    <button data-page="monitoring"><span class="ico">◉</span>ניטור מערכת</button>
+    <button data-page="updates"><span class="ico">↻</span>גרסאות ועדכונים</button>
+    <button data-page="warranty"><span class="ico">◇</span>אחריות</button>
+    <button data-page="security"><span class="ico">⌑</span>אבטחה והרשאות</button>
+    <button data-page="backups"><span class="ico">▧</span>גיבוי ושחזור</button>
+    <button data-page="audit"><span class="ico">≡</span>יומן פעולות</button>
+  </nav></div>
+  <div class="side-bottom">סביבת ממשק ראשונית<br>הנתונים יוצגו לאחר חיבור מאובטח לשירותים</div>
+</aside>
+<main class="main">
+  <header class="topbar"><div class="crumb">SKC <span style="color:#c1cbd5">/</span> <span id="crumbCurrent">לוח בקרה</span></div><div class="top-actions"><span class="env">סביבת פיתוח · ללא נתונים חיים</span><div class="avatar" title="חשבון מנהל">מ</div></div></header>
+  <div class="content">
+    <section class="page active" id="page-dashboard">
+      <div class="heading"><div><div class="eyebrow">MANUFACTURER CONTROL CENTER</div><h1>לוח הבקרה</h1><div class="sub">סקירה מרכזית של מערכת ארונות המפתחות החכמים</div></div><button class="btn" data-go="cabinets">＋ הוספת ארון</button></div>
+      <div class="stats">
+        <article class="stat"><div class="stat-top"><span>ארונות במערכת</span><span class="stat-icon">▣</span></div><div class="stat-value">—</div><div class="stat-note">יוצג לאחר חיבור למסד הנתונים</div></article>
+        <article class="stat"><div class="stat-top"><span>ארונות מחוברים</span><span class="stat-icon">◉</span></div><div class="stat-value">—</div><div class="stat-note">סטטוס תקשורת בזמן אמת</div></article>
+        <article class="stat"><div class="stat-top"><span>תקלות פתוחות</span><span class="stat-icon">⚒</span></div><div class="stat-value">—</div><div class="stat-note">מידע יוצג לאחר חיבור שירות התקלות</div></article>
+        <article class="stat"><div class="stat-top"><span>אחריות בתוקף</span><span class="stat-icon">◇</span></div><div class="stat-value">—</div><div class="stat-note">מעקב לפי תאריכי אחריות</div></article>
+      </div>
+      <section class="panel"><div class="panel-head"><h2>גישה מהירה</h2><span class="panel-note">מעבר לאזורי הניהול</span></div><div class="quick">
+        <button data-go="cabinets"><div class="quick-icon">▣</div><strong>ניהול ארונות</strong><span>רישום, שיוך והגדרות</span></button>
+        <button data-go="organizations"><div class="quick-icon">▤</div><strong>ארגונים ולקוחות</strong><span>ניהול ארגונים ושיוכים</span></button>
+        <button data-go="technicians"><div class="quick-icon">♙</div><strong>ניהול טכנאים</strong><span>חשבונות והרשאות</span></button>
+        <button data-go="incidents"><div class="quick-icon">⚒</div><strong>תקלות ותחזוקה</strong><span>מעקב אחר אירועים</span></button>
+      </div></section>
+      <section class="panel"><div class="panel-head"><h2>מצב המערכת</h2><span class="panel-note">תצוגת בסיס</span></div><div class="notice"><span style="font-size:20px">ⓘ</span><div><b>הפורטל נפתח בסביבת פיתוח.</b><br>עדיין לא בוצע חיבור ל-Firebase או למנגנון ההרשאות. לכן לא מוצגים נתוני לקוחות, ארונות או משתמשים, ולא ניתן לבצע פעולות שמשנות מידע.</div></div></section>
+    </section>
+    <section class="page" id="page-cabinets"><div class="heading"><div><div class="eyebrow">ASSET MANAGEMENT</div><h1>ניהול ארונות</h1><div class="sub">רישום ארונות, שיוך לארגונים ומעקב אחר מצבם</div></div><button class="btn" disabled title="יופעל לאחר חיבור מאובטח">＋ הוספת ארון</button></div><section class="panel"><div class="panel-head"><h2>רשימת ארונות</h2><input class="search" placeholder="חיפוש ארון (יופעל בהמשך)" disabled></div><div class="empty">עדיין אין חיבור לנתוני הארונות.</div></section></section>
+    <section class="page" id="page-organizations"><div class="heading"><div><div class="eyebrow">CUSTOMER MANAGEMENT</div><h1>ארגונים ולקוחות</h1><div class="sub">ניהול ארגונים ושיוך ארונות</div></div></div><section class="panel"><div class="empty">ניהול ארגונים יתווסף לאחר הגדרת מודל הנתונים והרשאות השרת.</div></section></section>
+    <section class="page" id="page-technicians"><div class="heading"><div><div class="eyebrow">TEAM ACCESS</div><h1>ניהול טכנאים</h1><div class="sub">חשבונות אישיים, אימות דו-שלבי והרשאות</div></div></div><section class="panel"><div class="empty">ניהול חשבונות יופעל לאחר חיבור Firebase Authentication ואימות הרשאות בצד השרת.</div></section></section>
+    <section class="page" id="page-incidents"><div class="heading"><div><div class="eyebrow">SERVICE DESK</div><h1>תקלות ותחזוקה</h1><div class="sub">מסך פנימי לפורטל היצרן בלבד</div></div></div><section class="panel"><div class="empty">תקלות יוצגו כאן לאחר חיבור שירות הדיווח וההתראות.</div></section></section>
+    <section class="page" id="page-monitoring"><div class="heading"><div><div class="eyebrow">SYSTEM HEALTH</div><h1>ניטור מערכת</h1><div class="sub">תקשורת, גרסאות ודיווחי חומרה</div></div></div><section class="panel"><div class="empty">נתוני ניטור יוצגו לאחר חיבור הבקרים ושירותי הענן.</div></section></section>
+    <section class="page" id="page-updates"><div class="heading"><div><div class="eyebrow">RELEASE MANAGEMENT</div><h1>גרסאות ועדכונים</h1><div class="sub">פיתוח, ניסוי, גרסה יציבה והפצה מדורגת</div></div></div><section class="panel"><div class="empty">ניהול גרסאות יתווסף לאחר הגדרת תהליך חתימה, בדיקה והפצה.</div></section></section>
+    <section class="page" id="page-warranty"><div class="heading"><div><div class="eyebrow">WARRANTY</div><h1>ניהול אחריות</h1><div class="sub">תאריכי אחריות והארכות מתועדות</div></div></div><section class="panel"><div class="empty">נתוני אחריות יוצגו לאחר חיבור נתוני הארונות.</div></section></section>
+    <section class="page" id="page-security"><div class="heading"><div><div class="eyebrow">SECURITY CENTER</div><h1>אבטחה והרשאות</h1><div class="sub">ניהול גישה, אימות דו-שלבי ומכשירים מחוברים</div></div></div><section class="panel"><div class="empty">הגדרות אבטחה יופעלו רק לאחר השלמת אימות והרשאות בצד השרת.</div></section></section>
+    <section class="page" id="page-backups"><div class="heading"><div><div class="eyebrow">BACKUP & RECOVERY</div><h1>גיבוי ושחזור</h1><div class="sub">ניהול גיבויים מוצפנים ותהליך שחזור מבוקר</div></div></div><section class="panel"><div class="empty">לא הוגדר עדיין חיבור לשירות הגיבויים.</div></section></section>
+    <section class="page" id="page-audit"><div class="heading"><div><div class="eyebrow">AUDIT TRAIL</div><h1>יומן פעולות</h1><div class="sub">תיעוד פעולות מנהל היצרן והטכנאים</div></div></div><section class="panel"><div class="empty">יומן הפעולות יוצג לאחר חיבור שירות התיעוד המאובטח.</div></section></section>
+    <div class="footer-note">SKC Manufacturer Portal · שלד ממשק ראשוני · לא מחובר למערכת חיה</div>
+  </div>
+</main>
+</div>
+<script>
+const labels={dashboard:"לוח בקרה",cabinets:"ניהול ארונות",organizations:"ארגונים ולקוחות",technicians:"ניהול טכנאים",incidents:"תקלות ותחזוקה",monitoring:"ניטור מערכת",updates:"גרסאות ועדכונים",warranty:"אחריות",security:"אבטחה והרשאות",backups:"גיבוי ושחזור",audit:"יומן פעולות"};
+function showPage(key){if(!labels[key])return;document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById("page-"+key)?.classList.add("active");document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===key));document.getElementById("crumbCurrent").textContent=labels[key];}
+document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
+document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.go)));
+</script>
+</body>
+</html>
